@@ -74,7 +74,7 @@ while True:
 
         else:
             pycom.rgbled(0x7fff00)
-                #lpp.add_accelerometer(pitch,roll,0)
+            #lpp.add_accelerometer(pitch,roll,0)
             lpp.add_analog_input(volt, channel = 1)
             lpp.add_gps(0,0, 55, channel = 2)
             lpp.send()
@@ -84,7 +84,6 @@ while True:
     else:
         pycom.rgbled(0x111111)
         print("SLEEP MODE ACTIVATED . . .")
-
-    gc.collect()
-    gc.mem_free()
-    py.setup_sleep(100)
+        gc.collect()
+        gc.mem_free()
+        py.setup_sleep(100)
