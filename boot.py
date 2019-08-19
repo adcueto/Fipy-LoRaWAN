@@ -3,4 +3,4 @@ import os
 import machine
 import pycom
 
-machine.main('b.py')
+machine.main('main.py')

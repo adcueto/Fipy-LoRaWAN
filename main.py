@@ -40,7 +40,7 @@ lora.join(activation=LoRa.ABP, auth=(dev_addr, nwk_swkey, app_swkey))
 s = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
 s.setsockopt(socket.SOL_LORA, socket.SO_DR, 3)
 
-print ("LoRa Initialized")
+print ("LoRaWAN Initialized")
 
 py.setup_int_pin_wake_up(False)
 py.setup_int_wake_up(True,True)
@@ -66,20 +66,20 @@ while True:
 
         if (str(coord[0]) != 'None'):
 
-            lpp.add_analog_input(volt, channel = 114)
-            lpp.add_gps(c0, c1, 55)
+            lpp.add_analog_input(volt, channel = 1)
+            lpp.add_gps(c0, c1, 55,  channel = 2)
             lpp.send()
             time.sleep(0.3)
-            print('Data sent: GPS')
+            print('Data sent with GPS')
 
         else:
             pycom.rgbled(0x7fff00)
                 #lpp.add_accelerometer(pitch,roll,0)
-            lpp.add_analog_input(volt, channel = 114)
-            lpp.add_gps(0,0, 55, channel = 124)
+            lpp.add_analog_input(volt, channel = 1)
+            lpp.add_gps(0,0, 55, channel = 2)
             lpp.send()
             time.sleep(0.3)
-            print('Data sent: No GPS')
+            print('Data sent without GPS')
 
     else:
         pycom.rgbled(0x111111)
