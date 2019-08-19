@@ -1,10 +1,12 @@
-# fipy-GPS-Accelerometer-LoRa
+# Fipy-LoRaWAN
 
 Project Purpose:
 Read GPS and Accelerometer values and push them to server via LoRa.
 
 Hardwares that used:
-FiPy, PyTrack, Multitech Conduit Gateway
+1. FiPy 
+2. PyTrack
+3. Multitech Conduit Gateway
 
 In this project, I pay attention to consume low power and stability. To decrease power consumption I used Cayenne LPP, Accelerometer sleep - wake up modes and close the unnecessary functions of FiPY.
 Network:
