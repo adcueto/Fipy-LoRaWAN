@@ -2,24 +2,34 @@ from network import LoRa
 from LIS2HH12 import LIS2HH12
 from pytrack import Pytrack
 from L76GNSS import L76GNSS #GPS
+from deepsleep import DeepSleep
 
+import deepsleep
 import pycom
 import socket
-import binascii
-import struct
-import pycom
 import network
-import cayenneLPP
+import cayenneLPP #Low power packet forwarding
 import time
 import gc
+import math
+import binascii
+import struct
 
+#Enable garbage collection:
 gc.enable()
+gc.collect()
+#Close Unnecessary functions:
+ds = DeepSleep()
+ds.enable_auto_poweroff()
+
 py = Pytrack()
 acc = LIS2HH12()
 l76 = L76GNSS(py, timeout=10)
-pycom.heartbeat(False)
 
-#lora_packet.decrypt(packet, AppSKey, NwkSKey).toString('hex')
+pycom.heartbeat(False)
+ds.enable_auto_poweroff()
+
+#Lora settings:
 lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.US915,adr=False, device_class=LoRa.CLASS_A, tx_power=20)
 
 dev_addr = struct.unpack(">l", binascii.unhexlify('26021A86'))[0]
@@ -47,22 +57,25 @@ py.setup_int_wake_up(True,True)
 acc.enable_activity_interrupt(150, 160)
 
 while True:
-    #wake_s = ds.get_wake_status()
-    #print(wake_s)
+        #wake_s = ds.get_wake_status()
+        #print(wake_s)
     time.sleep(0.1)
     #if(acc.activity()):
     if(True):
         pycom.rgbled(0x11fff1)
         coord = l76.coordinates()
         s.setblocking(True)
-        lpp = cayenneLPP.CayenneLPP(size = 100, sock = s)
+        lpp = cayenneLPP.CayenneLPP(size = 100, sock = s)#create socket to send messages to server
+
         pitch= acc.pitch()
         roll = acc.roll()
         #print('Pitch:',pitch)
         #print('Roll:' ,roll)
-        volt= py.read_battery_voltage() #Read Battery Voltage
+        coord = l76.coordinates() #Get the coordinates
         c0 =coord[0]
         c1 =coord[1]
+
+        volt= py.read_battery_voltage() #Read Battery Voltage
 
         if (str(coord[0]) != 'None'):
 
@@ -84,6 +97,9 @@ while True:
     else:
         pycom.rgbled(0x111111)
         print("SLEEP MODE ACTIVATED . . .")
-        gc.collect()
-        gc.mem_free()
-        py.setup_sleep(100)
+        time.sleep(0.2)
+        py.setup_sleep(20)
+        print(". . .")
+        ds.go_to_sleep(10)
+
+    gc.mem_free() #Clean the memory
