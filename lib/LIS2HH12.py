@@ -93,6 +93,12 @@ class LIS2HH12:
         rad = -math.atan2(y, (math.sqrt(x*x + z*z)))
         return (180 / math.pi) * rad
 
+    def yaw (self):
+        div = math.sqrt(math.pow(self.x[0], 2) + math.pow(self.z[0], 2))
+        if div == 0:
+            div = 0.01
+        return (180 / 3.14154) * math.atan(self.y[0] / div)
+
     def set_register(self, register, value, offset, mask):
         reg = bytearray(self.i2c.readfrom_mem(ACC_I2CADDR, register, 1))
         reg[0] &= ~(mask << offset)
