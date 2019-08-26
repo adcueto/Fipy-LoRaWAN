@@ -1,4 +1,4 @@
-# Fipy-LoRaWAN
+# Fipy-LoRaWAN-TTN
 
 Project Purpose:
 Read GPS and Accelerometer values and push them to server via LoRa.
