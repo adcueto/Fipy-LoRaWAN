@@ -32,7 +32,7 @@ ds.enable_auto_poweroff()
 #Lora settings:
 lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.US915,adr=False, device_class=LoRa.CLASS_A, tx_power=20)
 
-dev_addr = struct.unpack(">l", binascii.unhexlify('26021A86'))[0]
+dev_addr = struct.unpack(">l", binascii.unhexlify('26021192'))[0]
 nwk_swkey = binascii.unhexlify('CF3F93604C31A58A40690C98FEBB9FB4')
 app_swkey = binascii.unhexlify('6AC2D09B77EFECF43E9CC0A2607D41D9')
 
