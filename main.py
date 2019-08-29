@@ -23,11 +23,10 @@ gc.collect()
 #Close Unnecessary functions:
 ds = DeepSleep()
 #ds.enable_auto_poweroff() #enable auto power off
-
 bt = Bluetooth()
 bt.deinit() #close bluetooth
-wlan = network.WLAN() #close wlan
-wlan.deinit()
+wlan = network.WLAN()
+wlan.deinit()  #close WLAN
 
 
 py = Pytrack()
@@ -48,14 +47,14 @@ app_swkey = binascii.unhexlify('1863BFEE80BB7026A2A906BDF154D003')
 for i in range(0, 72):
     lora.remove_channel(i)
 
-lora.add_channel(8, frequency=903900000, dr_min=3, dr_max=3)
-lora.add_channel(9, frequency=904100000, dr_min=3, dr_max=3)
-lora.add_channel(10, frequency=904300000, dr_min=3, dr_max=3)
-lora.add_channel(11, frequency=904500000, dr_min=3, dr_max=3)
-lora.add_channel(12, frequency=904700000, dr_min=3, dr_max=3)
-lora.add_channel(13, frequency=904900000, dr_min=3, dr_max=3)
-lora.add_channel(14, frequency=905100000, dr_min=3, dr_max=3)
-lora.add_channel(15, frequency=905300000, dr_min=3, dr_max=3)
+lora.add_channel(8, frequency=903900000, dr_min=0, dr_max=3)
+lora.add_channel(9, frequency=904100000, dr_min=0, dr_max=3)
+lora.add_channel(10, frequency=904300000, dr_min=0, dr_max=3)
+lora.add_channel(11, frequency=904500000, dr_min=0, dr_max=3)
+lora.add_channel(12, frequency=904700000, dr_min=0, dr_max=3)
+lora.add_channel(13, frequency=904900000, dr_min=0, dr_max=3)
+lora.add_channel(14, frequency=905100000, dr_min=0, dr_max=3)
+lora.add_channel(15, frequency=905300000, dr_min=0, dr_max=3)
 lora.add_channel(65, frequency=904600000, dr_min=4, dr_max=4) # 500KHz uplink larger dr breaks(?)
 
 
@@ -78,7 +77,7 @@ while True:
     time.sleep(0.1)
     #if(acc.activity()):
     if(True):
-        pycom.rgbled(0x11fff1)
+        pycom.rgbled(0x000066) #Color blue
         coord = l76.coordinates()
         s.setblocking(True)
         lpp = cayenneLPP.CayenneLPP(size = 100, sock = s)#create socket to send messages to server
@@ -95,10 +94,10 @@ while True:
         c0 =coord[0]
         c1 =coord[1]
 
-        volt= py.read_battery_voltage() #Read Battery Voltage
+        #volt= py.read_battery_voltage() #Read Battery Voltage
 
         if (str(coord[0]) != 'None'):
-            pycom.rgbled(0x358A13)
+            pycom.rgbled(0x006600) #Color Green
             lpp.add_analog_input(volt, channel = 1)
             lpp.add_gps(c0, c1, 55,  channel = 2)
             lpp.send()
@@ -106,18 +105,18 @@ while True:
             print('Data sent with GPS')
 
         else:
-            pycom.rgbled(0x7fff00)
+            pycom.rgbled(0x660066) #Color Purpure
             #lpp.add_accelerometer(pitch,roll,0)
             lpp.add_analog_input(volt, channel = 1)
             lpp.add_gps(0,0, 55, channel = 2)
             lpp.send()
             time.sleep(1)
             print('Data sent without GPS')
-        #s.setblocking(False)
+        s.setblocking(False)
         time.sleep(0.1)
     else:
-        pycom.rgbled(0x111111)
-        # print("Sleep mode actived . . .")
+        pycom.rgbled(0x330000)  #color red
+        print("Sleep mode actived . . .")
         time.sleep(0.2)
         # go to sleep for 20 seconds maximum if no accelerometer interrupt happens
         # py.setup_sleep(20)
